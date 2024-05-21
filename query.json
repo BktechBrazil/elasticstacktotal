@@ -1,0 +1,55 @@
+{
+  "sort": [
+    {
+      "emissao": {
+        "order": "desc"
+      }
+    }
+  ],
+  "size": 1,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "fornecedor_ngram": {
+              "query": "%{estabelecimento}"
+            }
+          }
+        },
+        {
+          "range": {
+            "emissao": {
+              "gte": "%{data_inicial}",
+              "lte": "%{data_final}",
+	            "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            }
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "range": {
+                  "tarifa_calculada": {
+                    "gte": "%{valor_transacao}",
+                    "lte": "%{valor_transacao}"
+                  }
+                }
+              },
+              {
+                "range": {
+                  "tarifa": {
+                    "gte": "%{valor_transacao}",
+                    "lte": "%{valor_transacao}"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+
